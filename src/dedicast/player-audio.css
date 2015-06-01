@@ -1,0 +1,96 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 5 nov. 2014, 16:38:47
+    Author     : mombju
+*/
+    .root {
+    -white-ish : rgba(255,255,255,.90);
+    -black-ish : rgba(0,0,0,.80) ;
+    }
+    
+       #library-area{
+        -fx-arc-width: 10;
+        -fx-arc-height: 15;
+        -fx-border-color: green;
+        -fx-text-fill:coral;
+        -fx-background-color: green;
+       }
+    #stop-button {
+    -fx-arc-width: 5;
+    -fx-arc-height: 5;
+    -fx-fill: green;
+    -fx-translate-x: 5;
+    -fx-stroke: grey;
+}
+#play-button {
+    -fx-fill: green;
+    -fx-translate-x: 4;
+}
+.pause-circle {
+    -fx-stroke: green;
+    -fx-fill: transparent;
+    -fx-translate-x: 5;
+}
+.pause-line {
+    -fx-stroke-width: 4;
+    -fx-stroke: green;
+    -fx-translate-y: 6;
+}
+    
+    #close-circle{
+        -fx-fill:green;
+    }
+    #reduce-circle{
+        -fx-fill:green;
+    }
+    #full-screen-circle{
+        -fx-border-color:green;
+    }
+    
+    .slider{
+        -fx-show-tick-labels: false;
+        -fx-show-tick-marks: true;
+        -fx-padding:5;
+    }
+    .slider.axis .axis-label{
+        -fx-text-fill:white;
+    }
+    #menu-bar{
+        -fx-background-color: coral;
+        -fx-arc-width: 25;
+        -fx-arc-height: 25;
+    }
+    .menu .label{
+        -fx-text-fill:green;
+        -fx-font-size: 12;
+     }
+     .menu-item{
+         -fx-background-color: coral;
+     }
+     .SideBar{
+         -fx-border-color: green;
+         -fx-background-color: coral;
+     }
+     .SideBar.label{
+         -fx-text-fill: green;
+     }
+     
+     #control-sideBar{
+         -fx-background-color: green;
+         -fx-height:15;
+     }
+     #screen{
+      -fx-background-color: green;   
+     }
+     #TOOL-BAR{
+         -fx-width: 400;
+         -fx-height: 30 ;
+     }
+     .SideBar .Button{
+         -fx-background-color: bisque;
+         
+     }
