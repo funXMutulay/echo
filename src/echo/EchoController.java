@@ -6,6 +6,7 @@
 package echo;
 
 
+import filesmodel.SoundModel;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.DirectoryStream;
@@ -40,6 +41,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Slider;
@@ -89,8 +91,9 @@ public class EchoController implements Initializable {
     private   GridPane customVariable;
     @FXML
     private   StackPane defaultLibrary;
-    
+    @FXML
     private Stage PRIMARY_STAGE;
+    
     private String LIST_AUDIO_ID;
     private ChangeListener<Duration> progressListener;
     private InvalidationListener StatusListener;
@@ -115,8 +118,26 @@ public class EchoController implements Initializable {
     private String ARTISTE_AUDIO_COLUMN_NAME;
     private String GENRE_AUDIO_COLUMN_NAME;
     private String TITRE_AUDIO_COLUMN_NAME;
+     @FXML
+    private MediaPlayer[] dataAudio;
     
+     @FXML
+    private TableColumn titreAudioColumn;
+     @FXML
+      private TableColumn artisteAudioColumn;
+     @FXML
+      private TableColumn albumAudioColumn;
+     @FXML
+     private TableColumn genreAudioColumn;
+   
     @FXML
+    private  TableView <MediaPlayer > listAudio ;
+   
+ 
+    
+    
+    
+    
     private Node createMenuBar(){
 
 Scene scene = PRIMARY_STAGE.getScene();    
@@ -365,6 +386,8 @@ return tools;
 /* create Side Bar
 *@return sideBar sliding in & out
 */
+
+@FXML
 private Node createSideBarContent(){
 
         
@@ -480,6 +503,7 @@ private Node createSideBarContent(){
     return SideBarContent;
 
 }
+
 // animation to slide in & out SideBar
 class customVariable extends GridPane {
 //@return a control button to hide and show the sidebar
@@ -582,30 +606,22 @@ private Node createLibraryPanel(){
 
     
     
-   //resolve audio files
-      
-   final List<MediaPlayer> filesAudio = new ArrayList<MediaPlayer>(); 
-   
-   
-   
-   java.nio.file.Path  p1 = Paths.get("/Users/macbookpro/Documents/fichiers");
-             
- try (DirectoryStream<java.nio.file.Path>  ds2 = Files.newDirectoryStream(p1,"*.{mp3}"))
-			{
-                           
-                            for(java.nio.file.Path  path2 : ds2){
-			    String sound = path2.toAbsolutePath().toString();
-                            filesAudio.add(createPlayer("file:///" + ( sound).replace("\\", "/").replaceAll(" ", "%20"))); 
-                                                       
-                        }
-                        }catch(IOException ex){
-					}
+
     
-     
-    final ObservableList <MediaPlayer>    dataAudio = FXCollections.observableArrayList();
-    final   TableView<MediaPlayer > listAudio = new TableView(dataAudio);
+//resolve audio files
+      
+   
+    
+    
+    List<MediaPlayer> filesAudio = (List<MediaPlayer>) new SoundModel(); 
+   
+   
+   
+   
 
-
+  ObservableList <MediaPlayer>    dataAudio = FXCollections.observableArrayList(filesAudio);
+   TableView<MediaPlayer > listAudio = new TableView(dataAudio);
+  
 
 
     
@@ -620,13 +636,9 @@ private Node createLibraryPanel(){
        
        // add a metadataTable for meta data display
     listAudio.setStyle("-fx-font-size: 13px;"+"-fx-background-color:green;");
-    listAudio.setId(LIST_AUDIO_ID);
     
-   titreAudioColumn.setPrefWidth(150);
-   artisteAudioColumn.setPrefWidth(150);
-   genreAudioColumn.setPrefWidth(150);
-   albumAudioColumn.setPrefWidth(150);
-    
+   
+  
    
    titreAudioColumn.setCellValueFactory(new PropertyValueFactory<>(TITRE_AUDIO_COLUMN_NAME));
    artisteAudioColumn.setCellValueFactory(new PropertyValueFactory<>(ARTISTE_AUDIO_COLUMN_NAME));
@@ -640,71 +652,37 @@ private Node createLibraryPanel(){
     albumAudioColumn.setCellValueFactory((f)-> new SimpleStringProperty ((String) f.getValue().getMedia().getMetadata().get("album")));
     genreAudioColumn.setCellValueFactory((f)-> new SimpleStringProperty ((String) f.getValue().getMedia().getMetadata().get("genre")));
     
-   
+    listAudio.setPrefWidth(600);
+   listAudio.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+    listAudio.getColumns().get(0).prefWidthProperty().bind(listAudio.widthProperty().multiply(0.25));    // 25% for titre column size
+    listAudio.getColumns().get(1).prefWidthProperty().bind(listAudio.widthProperty().multiply(0.25));   // 25% for Artiste column size
+    listAudio.getColumns().get(2).prefWidthProperty().bind(listAudio.widthProperty().multiply(0.25));    // 25% for Album  column size
+    listAudio.getColumns().get(3).prefWidthProperty().bind(listAudio.widthProperty().multiply(0.25));   // 25% for Artiste column size
+    
        
        
     
     listAudio.setItems(dataAudio);
     listAudio.getColumns().addAll(titreAudioColumn,artisteAudioColumn,albumAudioColumn,genreAudioColumn);
     
-    listAudio.getSelectionModel().selectedItemProperty().addListener(
-        new ChangeListener<MediaPlayer>(){
-            public void changed(ObservableValue<? extends MediaPlayer> ov,MediaPlayer old_val , MediaPlayer new_val ){
-             MediaPlayer   mediaPlayer = new_val;   
-            }
-            });
+    listAudio.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends MediaPlayer> ov, MediaPlayer old_val, MediaPlayer new_val) -> {
+        MediaPlayer mediaPlayer1 = new_val;
+    });
    
      
     
-    listAudio.setOnMouseClicked(new EventHandler<MouseEvent>() {
-
-        public void handle(MouseEvent event) {
-            if (event.getClickCount() == 2){
-               MediaPlayer mediaPlayer ;
-                mediaPlayer = listAudio.getSelectionModel().getSelectedItem();
-                      playMedia(mediaPlayer );
-             Scene scene = PRIMARY_STAGE.getScene();
-             scene.lookup("#"+VIS_CONTAINER_ID).setVisible(true);
-            }       
-       
-            }
+    listAudio.setOnMouseClicked((MouseEvent event) -> {
+        if (event.getClickCount() == 2) {
+            MediaPlayer mediaPlayer1;
+            mediaPlayer1 = listAudio.getSelectionModel().getSelectedItem();
+            playMedia(mediaPlayer1);
+            Scene scene1 = PRIMARY_STAGE.getScene();
+            scene1.lookup("#"+VIS_CONTAINER_ID).setVisible(true);
+        }
     });
    
-    // Pane as  containers 
- final  Accordion vitrine = new Accordion();
- vitrine.setId(TAB_PANE);
-    
- TitledPane  audio = new TitledPane();
- audio.setText("Sonos");
- audio.setId(TAB_AUDIO_ID);
-  audio.setContent(listAudio);
-  
-  
-
-        
-   
-    
-    
-    vitrine.getPanes().addAll(audio);
-    
-    vitrine.setStyle("-fx-background-color:green;"+"-fx-border-color:coral;"+"-fx-opacity:0.7;");
-    
-    StackPane defaultLibrary = new StackPane();
-    defaultLibrary.setId(LIBRARY_PANEL_ID);
-    
-    defaultLibrary.setPrefWidth(600);
-   defaultLibrary.setPrefHeight(200);
-    
-    defaultLibrary.setStyle("-fx-background-color:green;"+"-fx-border-color:coral;"+"-fx-opacity:0.7;");
-    
-    
-    defaultLibrary.getChildren().add(vitrine);
-    
-      
-  defaultLibrary.setLayoutX(0);
-   defaultLibrary.setLayoutY(395);
-   
-   return defaultLibrary;
+ 
+   return listAudio;
   
 }
 

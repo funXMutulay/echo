@@ -4,6 +4,17 @@
 
 .mainFxmlClass {
     
-    #menu-bar
-
+    .root{
+        background-color: honeydew ;
+        
+        }
+    .Button{
+        background-color: honeydew ;
+        
+        }
+        .Button .label{
+        background-color: sienna ;
+        -fx-text-fill: honeydew; 
+        
+        }
 }

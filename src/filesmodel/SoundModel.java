@@ -18,14 +18,21 @@ import org.apache.commons.io.FileUtils;
  * @author macbookpro
  */
 public class SoundModel {
-    final  List<MediaPlayer > bookModel = new ArrayList<>();
+     private  List<MediaPlayer > soundModel = new ArrayList<>();
 
- public  List<  MediaPlayer >  BookModel(){
+ public  List<  MediaPlayer >  getSoundModel(){
 			
-return bookModel ;
+return soundModel ;
 
 }
 
+ public  void  setSoundModel( List<MediaPlayer > soundModel ){
+			
+this.soundModel= soundModel ;
+
+}
+ 
+ 
 public   void main(String[] args) throws IOException{
 			
 File dir = new File("/Users/macbookpro/Documents/fichiers");
@@ -33,7 +40,7 @@ File dir = new File("/Users/macbookpro/Documents/fichiers");
 		
 		List<File> files = (List<File>) FileUtils.listFiles(dir, extensions, true);
                 files.stream().map((file) -> file.toPath().toString()).forEach((biir) -> {
-                    bookModel.add(createPlayer("file:///" + ( biir).replace("\\", "/").replaceAll(" ", "%20")));
+                    soundModel.add(createPlayer("file:///" + ( biir).replace("\\", "/").replaceAll(" ", "%20")));
         });
 
 
